@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+</head>
+<body>
+<v-app id="app">
+    <div class="outerContainer">
+        <div
+            v-if="!showResults"
+            class="innerContainerSlides"
+        >
+            <div style="display: flex; flex-direction: row; align-items: center; width: 100%">
+                <v-slider
+                        v-model="sliderValue[slideIndex]"
+                        min="0"
+                        max="10"
+                        hide-details
+                        thumb-label="always"
+                        class="valueSlider"
+                ></v-slider>
+                <v-btn
+                        icon
+                        color="black"
+                        @click="nextSlide()"
+                >
+                    <v-icon>mdi-arrow-right-bold-circle-outline</v-icon>
+                </v-btn>
+            </div>
+            <p v-html="sliderText[slideIndex]"></p>
+        </div>
+        <div
+            v-else
+            class="innerContainerSolutions"
+        >
+            <div
+                v-for="(col, index) in selectedSolutions"
+                class="solutionHeaders"
+                style="display: flex; flex-direction: column"
+            >
+                <span class="defaultHeading">{{ solutionHeaders[index] }}</span>
+                <div class="solutionsContainer">
+                    <div
+                            v-for="row in selectedSolutions[index]"
+                            class="solutionRow"
+                    >
+                        <span class="paragraph">{{ row.text }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</v-app>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        vuetify: new Vuetify(),
+        data: {
+            slideIndex: 0,
+            sliderText: [
+                'Bei uns herrscht Chaos, was <span class="bold">Strukturen</span> und <span class="bold">Prozesse</span> betrifft.',
+                'Bei uns herrscht Chaos in Bezug auf <span class="bold">Verantwortlichkeiten</span> und <span class="bold">Rollenverteilung</span>.',
+                'Unsere <span class="bold">Teams</span> funktionieren nicht so effektiv wie gewünscht.',
+                'Wir schaffen es nicht, <span class="bold">Deadlines</span> einzuhalten.',
+                'Jedes Projekt wird nur mit <span class="bold">größter Mühe pünktlich</span> abgegeben.',
+                'Wichtige <span class="bold">Informationen</span> bleiben bei uns des Öfteren auf der Strecke oder <span class="bold">gehen unter</span>.',
+                'In Zukunft möchten wir <span class="bold">kundenzentrierter</span> arbeiten.',
+                'In letzter Zeit fehlt uns etwas <span class="bold">Pepp</span> hinter unseren Projekten.',
+                'Kommende <span class="bold">Kreativprojekte</span> wollen wir mit <span class="bold">neuen Ansätzen</span> angehen und verfolgen.',
+                'Unterstützung bei unserem <span class="bold">Gründungsvorhaben</span> wäre sehr hilfreich.',
+                'Wir wollen einen langfristigen Partner auf Augenhöhe als Unterstützung aufkommender Probleme.',
+            ],
+            sliderValue: [
+                // 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5
+                6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6
+            ],
+            sliderThreshold: 5,
+            showResults: false,
+            solutionHeaders: ['Prozesse und Workflows', 'Hot-Topic Coaching', 'Follow-up Supervision', 'Gründungsunterstützung'],
+            availableSolutions: [
+                // 0
+                { text: 'Arbeitsprozesse', selected: false },
+                // 1
+                { text: 'Kommunikations- & Informationsflow', selected: false },
+                // 2
+                { text: 'Teamstruktur', selected: false },
+                // 3
+                { text: 'Customer Journey Touchpoints', selected: false },
+
+                // 4
+                { text: 'Zeitmanagement', selected: false },
+                // 5
+                { text: 'Kreativitätstechniken', selected: false },
+                // 6
+                { text: 'Team Building', selected: false },
+                // 7
+                { text: 'Embodied Design', selected: false },
+
+                // 8
+                { text: 'Newsletter', selected: false },
+                // 9
+                { text: 'Langzeit Mentoring', selected: false },
+                // 10
+                { text: 'Feedback Evaluation', selected: false },
+
+                // 11
+                { text: 'Gründungsunterstützung', selected: false },
+            ],
+            selectedSolutions: [[], [], [], []],
+        },
+        methods: {
+            nextSlide() {
+                if(this.slideIndex === this.sliderText.length - 1) {
+                    this.calculateResults();
+                    this.showResults = true;
+                } else {
+                    this.slideIndex++;
+                }
+            },
+
+            calculateResults() {
+                // Prozesse und Workflows
+                if(this.sliderValue[0] > this.sliderThreshold) {
+                    this.pushToSelectedSolutions(0, 0);
+                    this.pushToSelectedSolutions(2, 9);
+                }
+                if(this.sliderValue[1] > this.sliderThreshold) {
+                    this.pushToSelectedSolutions(0, 1);
+                    this.pushToSelectedSolutions(0, 2);
+                    this.pushToSelectedSolutions(1, 6);
+                }
+                if(this.sliderValue[2] > this.sliderThreshold) {
+                    this.pushToSelectedSolutions(0, 2);
+                    this.pushToSelectedSolutions(1, 6);
+                }
+                if(this.sliderValue[3] > this.sliderThreshold) {
+                    this.pushToSelectedSolutions(1, 4);
+                }
+                if(this.sliderValue[4] > this.sliderThreshold) {
+                    this.pushToSelectedSolutions(1, 4);
+                }
+                if(this.sliderValue[5] > this.sliderThreshold) {
+                    this.pushToSelectedSolutions(0, 0);
+                    this.pushToSelectedSolutions(0, 1);
+                    this.pushToSelectedSolutions(0, 2);
+                }
+                if(this.sliderValue[6] > this.sliderThreshold) {
+                    this.pushToSelectedSolutions(0, 3);
+                    this.pushToSelectedSolutions(1, 7);
+                    this.pushToSelectedSolutions(2, 10);
+                }
+                if(this.sliderValue[7] > this.sliderThreshold) {
+                    this.pushToSelectedSolutions(1, 5);
+                    this.pushToSelectedSolutions(1, 7);
+                    this.pushToSelectedSolutions(2, 10);
+                }
+                if(this.sliderValue[8] > this.sliderThreshold) {
+                    this.pushToSelectedSolutions(1, 5);
+                }
+                if(this.sliderValue[9] > this.sliderThreshold) {
+                    this.pushToSelectedSolutions(3, 11);
+                }
+                if(this.sliderValue[10] > this.sliderThreshold) {
+                    this.pushToSelectedSolutions(2, 8);
+                    this.pushToSelectedSolutions(2, 9);
+                    this.pushToSelectedSolutions(2, 10);
+                }
+            },
+
+            pushToSelectedSolutions(col, solutionIndex) {
+                if(!this.selectedSolutions[col].some((el) => el.text === this.availableSolutions[solutionIndex].text)) {
+                    console.log("Push ", this.availableSolutions[solutionIndex], " to ", this.solutionHeaders[col]);
+                    this.selectedSolutions[col].push(this.availableSolutions[solutionIndex]);
+                }
+            }
+        }
+    })
+</script>
+
+<style>
+    .outerContainer {
+        width: 100%;
+        height: 100%;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+    }
+
+    .innerContainerSlides {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .innerContainerSolutions {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .valueSlider {
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .solutionHeaders {
+        padding: 15px;
+        margin: 0 4px;
+        border: 1px solid #dcebf7;
+        border-radius: 5px;
+    }
+
+    .solutionsContainer {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .solutionRow {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .bold {
+        font-weight: bold;
+    }
+
+    /* These classes should be the same as in webflow */
+    .defaultHeading {
+        color: #f66845;
+        text-align: center;
+        font-weight: 400;
+        font-size: 16px;
+    }
+
+    .paragraph {
+        color: #6a859c;
+        font-size: 14px;
+    }
+
+    .v-application--wrap {
+        min-height: unset !important;
+    }
+</style>
+</body>
+</html>
