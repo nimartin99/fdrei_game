@@ -13,7 +13,8 @@
             v-if="!showResults"
             class="innerContainerSlides"
         >
-            <div style="display: flex; flex-direction: row; align-items: center; width: 100%">
+            <div style="display: flex; flex-direction: row; align-items: center; width: 90%; margin: 0 5% 0 5%;">
+                <span>Trifft überhaupt nicht zu</span>
                 <v-slider
                         v-model="sliderValue[slideIndex]"
                         min="0"
@@ -21,36 +22,59 @@
                         hide-details
                         thumb-label="always"
                         class="valueSlider"
+                        color="#334263"
+                        track-color="#e5655d"
                 ></v-slider>
-                <v-btn
-                        icon
-                        color="black"
-                        @click="nextSlide()"
-                >
-                    <v-icon>mdi-arrow-right-bold-circle-outline</v-icon>
-                </v-btn>
+                <span>Trifft voll zu</span>
             </div>
-            <p v-html="sliderText[slideIndex]"></p>
+            <p class="slideText" v-html="sliderText[slideIndex]"></p>
+            <div style="display: flex; flex-direction: row">
+                <button
+                    v-if="slideIndex > 0"
+                    class="button2"
+                    style="margin-right: 4px"
+                    @click="previousSlide()"
+                >
+                    Zurück
+                </button>
+                <button
+                    class="button2"
+                    style="margin-left: 4px"
+                    @click="nextSlide()"
+                >
+                    {{ slideIndex === sliderText.length - 1 ? 'Zeig mir meine individuelle Beratung' : 'Weiter' }}
+                </button>
+            </div>
         </div>
         <div
             v-else
-            class="innerContainerSolutions"
+            style="display: flex; flex-direction: column; align-items: center"
         >
-            <div
-                v-for="(col, index) in selectedSolutions"
-                class="solutionHeaders"
-                style="display: flex; flex-direction: column"
-            >
-                <span class="defaultHeading">{{ solutionHeaders[index] }}</span>
-                <div class="solutionsContainer">
-                    <div
-                            v-for="row in selectedSolutions[index]"
-                            class="solutionRow"
-                    >
-                        <span class="paragraph">{{ row.text }}</span>
+            <div class="innerContainerSolutions">
+                <div
+                    v-for="(col, index) in selectedSolutions"
+                    class="solutionHeaders"
+                    style="display: flex; flex-direction: column"
+                    :style="selectedSolutions[index].length ? '' : 'display: none'"
+                >
+                    <span class="defaultHeading">{{ solutionHeaders[index] }}</span>
+                    <div class="solutionsContainer">
+                        <div
+                                v-for="row in selectedSolutions[index]"
+                                class="solutionRow"
+                        >
+                            <span class="paragraph">{{ row.text }}</span>
+                        </div>
                     </div>
                 </div>
             </div>
+            <button
+                    style="margin-top: 4px"
+                    class="button2"
+                    @click="reset()"
+            >
+                Neu starten
+            </button>
         </div>
     </div>
 </v-app>
@@ -77,8 +101,8 @@
                 'Wir wollen einen langfristigen Partner auf Augenhöhe als Unterstützung aufkommender Probleme.',
             ],
             sliderValue: [
-                // 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5
-                6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6
+                5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5
+                // 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6
             ],
             sliderThreshold: 5,
             showResults: false,
@@ -115,6 +139,19 @@
             selectedSolutions: [[], [], [], []],
         },
         methods: {
+            reset() {
+                this.sliderValue = [ 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5 ];
+                this.selectedSolutions = [[], [], [], []];
+                this.showResults = false;
+                this.slideIndex = 0;
+            },
+
+            previousSlide() {
+                if(this.slideIndex > 0) {
+                    this.slideIndex--;
+                }
+            },
+
             nextSlide() {
                 if(this.slideIndex === this.sliderText.length - 1) {
                     this.calculateResults();
@@ -175,7 +212,6 @@
 
             pushToSelectedSolutions(col, solutionIndex) {
                 if(!this.selectedSolutions[col].some((el) => el.text === this.availableSolutions[solutionIndex].text)) {
-                    console.log("Push ", this.availableSolutions[solutionIndex], " to ", this.solutionHeaders[col]);
                     this.selectedSolutions[col].push(this.availableSolutions[solutionIndex]);
                 }
             }
@@ -184,6 +220,14 @@
 </script>
 
 <style>
+    #app {
+        width: 100vw;
+        height: 100vh;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+    }
+
     .outerContainer {
         width: 100%;
         height: 100%;
@@ -193,6 +237,7 @@
     }
 
     .innerContainerSlides {
+        width: 100%;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -207,7 +252,6 @@
 
     .valueSlider {
         width: 100%;
-        margin-bottom: 0;
     }
 
     .solutionHeaders {
@@ -232,6 +276,7 @@
 
     .bold {
         font-weight: bold;
+        color: #f66845;
     }
 
     /* These classes should be the same as in webflow */
@@ -245,6 +290,22 @@
     .paragraph {
         color: #6a859c;
         font-size: 14px;
+    }
+
+    .slideText {
+        color: #334263;
+    }
+
+    .button2 {
+        width: fit-content;
+        padding: 4px 12px;
+        border: solid 1px #c2c2c2;
+        border-radius: 6px;
+        font-size: 30px;
+        line-height: 46px;
+        font-weight: 400;
+        letter-spacing: normal;
+        text-transform: uppercase;
     }
 
     .v-application--wrap {
