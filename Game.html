@@ -9,12 +9,23 @@
 <body>
 <v-app id="app">
     <div class="outerContainer">
+<!--        <svg width="200" height="200" id="Ebene_2" data-name="Ebene 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24.5 19.5">-->
+<!--            <g id="transport">-->
+<!--                <g>-->
+<!--                    <g>-->
+<!--                        <line class="cls-1" x1="14.75" y1=".75" x2="23.75" y2="9.75"/>-->
+<!--                        <line class="cls-1" x1="14.75" y1="18.75" x2="23.75" y2="9.75"/>-->
+<!--                    </g>-->
+<!--                    <line class="cls-1" x1=".75" y1="9.75" x2="23.75" y2="9.75"/>-->
+<!--                </g>-->
+<!--            </g>-->
+<!--        </svg>-->
         <div
             v-if="!showResults"
             class="innerContainerSlides"
         >
             <div style="display: flex; flex-direction: row; align-items: center; width: 90%; margin: 0 5% 0 5%;">
-                <span>Trifft überhaupt nicht zu</span>
+                <span class="sliderMinMaxText">Trifft überhaupt nicht zu</span>
                 <v-slider
                         v-model="sliderValue[slideIndex]"
                         min="0"
@@ -25,7 +36,7 @@
                         color="#334263"
                         track-color="#e5655d"
                 ></v-slider>
-                <span>Trifft voll zu</span>
+                <span class="sliderMinMaxText">Trifft voll zu</span>
             </div>
             <p class="slideText" v-html="sliderText[slideIndex]"></p>
             <div style="display: flex; flex-direction: row">
@@ -35,6 +46,11 @@
                     style="margin-right: 4px"
                     @click="previousSlide()"
                 >
+                    <img
+                        src="https://uploads-ssl.webflow.com/634689fd64a47c1645953a58/63dfb2986af00b546e52d444_arrowLeft.svg"
+                        class="icon"
+                        style="margin-right: 8px"
+                    >
                     Zurück
                 </button>
                 <button
@@ -43,6 +59,11 @@
                     @click="nextSlide()"
                 >
                     {{ slideIndex === sliderText.length - 1 ? 'Zeig mir meine individuelle Beratung' : 'Weiter' }}
+                    <img
+                         src="https://uploads-ssl.webflow.com/634689fd64a47c1645953a58/63dfb2980c95fc5d40218275_arrowRight.svg"
+                         class="icon"
+                         style="margin-left: 8px; color: black"
+                    >
                 </button>
             </div>
         </div>
@@ -220,13 +241,13 @@
 </script>
 
 <style>
-    #app {
-        width: 100vw;
-        height: 100vh;
-        justify-content: center;
-        align-items: center;
-        display: flex;
-    }
+    /*#app {*/
+    /*    width: 100vw;*/
+    /*    height: 100vh;*/
+    /*    justify-content: center;*/
+    /*    align-items: center;*/
+    /*    display: flex;*/
+    /*}*/
 
     .outerContainer {
         width: 100%;
@@ -251,7 +272,9 @@
     }
 
     .valueSlider {
-        width: 100%;
+        width: 70%;
+        margin: 0 5%;
+
     }
 
     .solutionHeaders {
@@ -297,6 +320,8 @@
     }
 
     .button2 {
+        display: flex;
+        flex-direction: row;
         width: fit-content;
         padding: 4px 12px;
         border: solid 1px #c2c2c2;
@@ -308,8 +333,25 @@
         text-transform: uppercase;
     }
 
+    .icon {
+        width: 24px;
+    }
+
+    .sliderMinMaxText {
+        width: 10%;
+        min-width: 50px;
+    }
+
     .v-application--wrap {
         min-height: unset !important;
+    }
+
+    .cls-1 {
+        fill: none;
+        stroke: #334263;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 1.5px;
     }
 </style>
 </body>
