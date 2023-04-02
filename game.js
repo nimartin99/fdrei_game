@@ -18,8 +18,8 @@ new Vue({
         ],
         sliderValue: [
             5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5
-            // 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6
         ],
+        percentageProgress: 0,
         sliderThreshold: 5,
         showResults: false,
         solutionHeaders: ['Prozesse und Workflows', 'Hot-Topic Coaching', 'Follow-up Supervision', 'Gründungsunterstützung'],
@@ -118,6 +118,12 @@ new Vue({
                 this.pushToSelectedSolutions(2, 9);
                 this.pushToSelectedSolutions(2, 10);
             }
+
+            let valueSum = 0;
+            this.sliderValue.forEach((value) => {
+                valueSum += value;
+            })
+            this.percentageProgress = valueSum / 1.1;
         },
         pushToSelectedSolutions(col, solutionIndex) {
             if(!this.selectedSolutions[col].some((el) => el.text === this.availableSolutions[solutionIndex].text)) {
